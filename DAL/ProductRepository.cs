@@ -74,27 +74,5 @@ namespace DAL
             }
             return query.Skip((filter.pageNo - 1) * filter.itemsPerPage).Take(filter.itemsPerPage).Where(x => x.SellStartDate != null).Where(x => x.ProductLine == filter.productLineStartsWith).ToList();
         }
-
-        public async Task<IEnumerable> GetAllPerson(PersonFilter filter)
-        {
-            var query = await context.People.Where(x => x.FirstName == filter.firstName).Skip((filter.pageNo - 1) * filter.itemsPerPage).Take(filter.itemsPerPage).Join(context.PersonPhones, p => p.BusinessEntityId, pp => pp.BusinessEntityId, (p, pp) => new { p, pp }).Select(result => new
-            {
-                BusinessEntityId = result.p.BusinessEntityId,
-                PersonType = result.p.PersonType,
-                NameStyle = result.p.NameStyle,
-                Title = result.p.Title,
-                FirstName = result.p.FirstName,
-                MiddleName = result.p.MiddleName,
-                LastName = result.p.LastName,
-                Suffix = result.p.Suffix,
-                EmailPromotion = result.p.EmailPromotion,
-                AdditionalContactInfo = result.p.AdditionalContactInfo,
-                Demographics = result.p.Demographics,
-                rowguid = result.p.Rowguid,
-                ModifiedDate = result.p.ModifiedDate,
-                PhoneNumber = result.pp.PhoneNumber
-            }).ToListAsync();
-            return query;
-        }
     }
 }

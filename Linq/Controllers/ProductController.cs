@@ -23,13 +23,6 @@ namespace Linq.Controllers
             var data = ProductService.GetAllProduct(filter);
             return Ok(data);
         }
-
-        [HttpGet("person")]
-        public async Task<ActionResult> GetAllPerson([FromQuery] PersonFilter filter)
-        {
-            var data = await ProductService.GetAllPerson(filter);
-            return Ok(data);
-        }
     }
 }
 

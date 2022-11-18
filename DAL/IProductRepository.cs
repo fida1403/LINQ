@@ -11,6 +11,5 @@ namespace DAL
     public interface IProductRepository
     {
         public List<Product> GetAllProduct(ProductFilter filter);
-        public Task<IEnumerable> GetAllPerson(PersonFilter filter);
     }
 }

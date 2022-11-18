@@ -13,8 +13,8 @@ namespace BAL
     public interface IProductService
     {
         List<Product> GetAllProduct(ProductFilter filter);
-        Task<IEnumerable> GetAllPerson(PersonFilter filter);
     }
+
     public class ProductService : IProductService
     {
         public List<Product> GetAllProduct(ProductFilter filter)
@@ -23,13 +23,6 @@ namespace BAL
             return result;
         }
 
-        public Task<IEnumerable> GetAllPerson(PersonFilter filter)
-        {
-            var result = repository.GetAllPerson(filter);
-            return result;
-        }
-
-       
         private IProductRepository repository;
         public ProductService(IProductRepository repo)
         {
