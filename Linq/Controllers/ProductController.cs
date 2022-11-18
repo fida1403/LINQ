@@ -3,6 +3,7 @@ using DAL;
 using Linq.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections;
 
 namespace Linq.Controllers
 {
@@ -10,18 +11,25 @@ namespace Linq.Controllers
     [ApiController]
     public class ProductController : ControllerBase
     {
-            private IProductService ProductService;
-            public ProductController(IProductService productService)
-            {
-                ProductService = productService;
-            }
+        private IProductService ProductService;
+        public ProductController(IProductService productService)
+        {
+            ProductService = productService;
+        }
+        
+        [HttpGet]
+        public ActionResult<Product> GetAllProduct([FromQuery] ProductFilter filter)
+        {
+            var data = ProductService.GetAllProduct(filter);
+            return Ok(data);
+        }
 
-            [HttpGet]
-            public ActionResult<Product> GetAllProduct([FromQuery] ProductFilter filter)
-            {
-                var data = ProductService.GetAllProduct(filter);
-                return Ok(data);
-            }
+        [HttpGet("person")]
+        public async Task<ActionResult> GetAllPerson([FromQuery] PersonFilter filter)
+        {
+            var data = await ProductService.GetAllPerson(filter);
+            return Ok(data);
+        }
     }
 }
 
