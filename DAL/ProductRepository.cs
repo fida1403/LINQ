@@ -38,21 +38,13 @@ namespace DAL
             }
             if (filter.sortByAscendingOrDescending == "Ascending")
             {
-                switch (filter.sortBy)
+                query = filter.sortBy switch
                 {
-                    case "Name":
-                        query = query.OrderBy(x => x.Name);
-                        break;
-                    case "ProductNumber":
-                        query = query.OrderBy(x => x.ProductNumber);
-                        break;
-                    case "Color":
-                        query = query.OrderBy(x => x.Color);
-                        break;
-                    default:
-                        query = query.OrderBy(x => x.ProductId);
-                        break;
-                }
+                    "Name" => query.OrderBy(x => x.Name),
+                    "ProductNumber" => query.OrderBy(x => x.ProductNumber),
+                    "Color" => query.OrderBy(x => x.Color),
+                    _ => query.OrderBy(x => x.ProductId),
+                };
             }
             if (filter.sortByAscendingOrDescending == "Descending")
             {
