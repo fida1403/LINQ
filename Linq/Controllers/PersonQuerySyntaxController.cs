@@ -21,5 +21,12 @@ namespace Linq.Controllers
             var data = await PersonService.GetAllPersonQuerySyntax(filter);
             return Ok(data);
         }
+
+        [HttpGet("sql")]
+        public async Task<ActionResult> GetAllPersonSqlQuery([FromQuery] PersonFilter filter)
+        {
+            var data= await PersonService.GetAllPersonSqlQuery(filter);
+            return Ok(data);
+        }
     }
 }

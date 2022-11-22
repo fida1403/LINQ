@@ -19,7 +19,7 @@ namespace DAL
 
         public async Task<IEnumerable> GetAllPerson(PersonFilter filter)
         {
-            var query = await context.People.Where(x => x.FirstName == filter.firstName).Skip((filter.pageNo - 1) * filter.itemsPerPage).Take(filter.itemsPerPage).Join(context.PersonPhones, p => p.BusinessEntityId, pp => pp.BusinessEntityId, (p, pp) => new { p, pp }).Select(result => new
+            var query = await context.People.Skip((filter.pageNo - 1) * filter.itemsPerPage).Take(filter.itemsPerPage).Join(context.PersonPhones, p => p.BusinessEntityId, pp => pp.BusinessEntityId, (p, pp) => new { p, pp }).Select(result => new
             {
                 BusinessEntityId = result.p.BusinessEntityId,
                 PersonType = result.p.PersonType,
@@ -41,9 +41,9 @@ namespace DAL
 
         public async Task<IEnumerable> GetAllPersonQuerySyntax(PersonFilter filter)
         {
-            var query = (from p in context.People
-                         join pp in context.PersonPhones on p.BusinessEntityId equals pp.BusinessEntityId
-                         where p.FirstName == filter.firstName
+            var query = (from p in context.People.OrderBy(p => p.FirstName)
+                         join pp in context.PersonPhones on p.BusinessEntityId equals pp.BusinessEntityId into lj
+                         from pn in lj.DefaultIfEmpty()
                          select new
                          {
                              BusinessEntityId = p.BusinessEntityId,
@@ -59,8 +59,14 @@ namespace DAL
                              Demographics = p.Demographics,
                              rowguid = p.Rowguid,
                              ModifiedDate = p.ModifiedDate,
-                             PhoneNumber = pp.PhoneNumber
+                             PhoneNumber = pn== null ? null : pn.PhoneNumber,
                          }).Skip((filter.pageNo - 1) * filter.itemsPerPage).Take(filter.itemsPerPage).ToList();
+            return query;
+        }
+
+        public async Task<IEnumerable> GetAllPersonSqlQuery(PersonFilter filter)
+        {
+            var query = "select * from Person left join PersonPhone on Person.BusinessEntityId=PersonPhone.BusinessEntityId";
             return query;
         }
     }

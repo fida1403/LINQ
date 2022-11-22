@@ -12,6 +12,7 @@ namespace BAL
     {
         Task<IEnumerable> GetAllPerson(PersonFilter filter);
         Task<IEnumerable> GetAllPersonQuerySyntax(PersonFilter filter);
+        Task<IEnumerable> GetAllPersonSqlQuery(PersonFilter filter);
     }
 
     public class PersonService : IPersonService
@@ -25,6 +26,12 @@ namespace BAL
         public Task<IEnumerable> GetAllPersonQuerySyntax(PersonFilter filter)
         {
             var result = repository.GetAllPersonQuerySyntax(filter);
+            return result;
+        }
+
+        public Task<IEnumerable> GetAllPersonSqlQuery(PersonFilter filter)
+        {
+            var result = repository.GetAllPersonSqlQuery(filter);
             return result;
         }
 
