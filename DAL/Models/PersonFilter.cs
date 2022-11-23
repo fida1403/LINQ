@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DAL.Models
 {
-    public class PersonFilter : BaseClass
+    public class PersonFilter : FilterBase
     {
     }
 }

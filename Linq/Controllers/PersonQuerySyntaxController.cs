@@ -1,6 +1,5 @@
 ﻿using BAL;
 using DAL.Models;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Linq.Controllers
@@ -14,6 +13,7 @@ namespace Linq.Controllers
         {
             PersonService = personService;
         }
+
 
         [HttpGet]
         public async Task<ActionResult> GetAllPersonQuerySyntax([FromQuery] PersonFilter filter)

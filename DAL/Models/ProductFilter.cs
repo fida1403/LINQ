@@ -7,13 +7,12 @@ using DAL.Models;
 
 namespace DAL
 {
-    public class ProductFilter : BaseClass
+    public class ProductFilter : FilterBase
     {
         public string productNumber { get; set; }
         public string color { get; set; }
         public decimal listPrice { get; set; }
         public string size { get; set; }
         public string productLineStartsWith { get; set; }
-        public string sortByAscendingOrDescending { get; set; }
     }
 }
