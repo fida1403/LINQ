@@ -1,11 +1,4 @@
 ﻿using Linq.Models;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DAL
 {
@@ -16,6 +9,7 @@ namespace DAL
         {
             this.context = context;
         }
+
 
         public List<Product> GetAllProduct(ProductFilter filter)
         {
@@ -36,7 +30,7 @@ namespace DAL
             {
                 query = query.Where(x => x.Size == filter.size);
             }
-            if (filter.sortByAscendingOrDescending == "Ascending")
+            if (filter.IsAscending)
             {
                 query = filter.sortBy switch
                 {
@@ -46,7 +40,7 @@ namespace DAL
                     _ => query.OrderBy(x => x.ProductId),
                 };
             }
-            if (filter.sortByAscendingOrDescending == "Descending")
+            else
             {
                 switch (filter.sortBy)
                 {

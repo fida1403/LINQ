@@ -1,12 +1,7 @@
 ﻿using DAL.Models;
 using Linq.Models;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DAL
 {
@@ -17,6 +12,7 @@ namespace DAL
         {
             this.context = context;
         }
+
 
         public async Task<IEnumerable> GetAllPerson(PersonFilter filter)
         {
@@ -62,7 +58,7 @@ namespace DAL
                              ModifiedDate = p.ModifiedDate,
                              PhoneNumber = pn == null ? null : pn.PhoneNumber,
                          });
-            if (filter.sortBy != null)
+            if (filter.IsAscending)
             {
                 switch (filter.sortBy)
                 {
@@ -77,8 +73,22 @@ namespace DAL
                         break;
                 }
             }
+            else
+            {
+                switch (filter.sortBy)
+                {
+                    case "FirstName":
+                        query = query.OrderByDescending(x => x.FirstName);
+                        break;
+                    case "LastName":
+                        query = query.OrderByDescending(x => x.LastName);
+                        break;
+                    default:
+                        query = query.OrderByDescending(x => x.BusinessEntityId);
+                        break;
+                }
+            }
             return query.Skip((filter.pageNo - 1) * filter.itemsPerPage).Take(filter.itemsPerPage).ToList();
-
         }
 
         public async Task<IEnumerable> GetAllPersonSqlQuery(PersonFilter filter)
@@ -87,5 +97,4 @@ namespace DAL
             return query;
         }
     }
-
 }
