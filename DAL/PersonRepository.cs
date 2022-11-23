@@ -1,4 +1,5 @@
-﻿using Linq.Models;
+﻿using DAL.Models;
+using Linq.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections;
@@ -41,7 +42,7 @@ namespace DAL
 
         public async Task<IEnumerable> GetAllPersonQuerySyntax(PersonFilter filter)
         {
-            var query = (from p in context.People.OrderBy(p => p.FirstName)
+            var query = (from p in context.People
                          join pp in context.PersonPhones on p.BusinessEntityId equals pp.BusinessEntityId into lj
                          from pn in lj.DefaultIfEmpty()
                          select new
@@ -59,9 +60,25 @@ namespace DAL
                              Demographics = p.Demographics,
                              rowguid = p.Rowguid,
                              ModifiedDate = p.ModifiedDate,
-                             PhoneNumber = pn== null ? null : pn.PhoneNumber,
-                         }).Skip((filter.pageNo - 1) * filter.itemsPerPage).Take(filter.itemsPerPage).ToList();
-            return query;
+                             PhoneNumber = pn == null ? null : pn.PhoneNumber,
+                         });
+            if (filter.sortBy != null)
+            {
+                switch (filter.sortBy)
+                {
+                    case "FirstName":
+                        query = query.OrderBy(x => x.FirstName);
+                        break;
+                    case "LastName":
+                        query = query.OrderBy(x => x.LastName);
+                        break;
+                    default:
+                        query = query.OrderBy(x => x.BusinessEntityId);
+                        break;
+                }
+            }
+            return query.Skip((filter.pageNo - 1) * filter.itemsPerPage).Take(filter.itemsPerPage).ToList();
+
         }
 
         public async Task<IEnumerable> GetAllPersonSqlQuery(PersonFilter filter)
@@ -70,4 +87,5 @@ namespace DAL
             return query;
         }
     }
+
 }
